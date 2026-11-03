@@ -371,6 +371,24 @@ export default function App() {
     addEventListener("keydown", handler);
     return () => removeEventListener("keydown", handler);
   }, [admin]);
+  const menuButton = useRef<HTMLButtonElement>(null);
+  useEffect(() => {
+    if (!mobile) return;
+    const drawer = document.getElementById("workspace-navigation");
+    drawer?.querySelector<HTMLButtonElement>(".navigation-close")?.focus();
+    const handleKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setMobile(false);
+        menuButton.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [mobile]);
+  const closeNavigation = () => {
+    setMobile(false);
+    menuButton.current?.focus();
+  };
   const navigate = (p: string) => {
     setPage(p);
     location.hash = p;
@@ -2574,6 +2592,19 @@ export default function App() {
       </div>
     );
   const nav = admin ? adminNav : sellerNav;
+  const mobileTabs = admin
+    ? [
+        ["Overview", "Home", LayoutDashboard],
+        ["Inventory", "Stock", Box],
+        ["Sellers", "Sellers", Users],
+        ["Fulfillment", "Fulfillment", Truck],
+      ] as const
+    : [
+        ["Dashboard", "Home", LayoutDashboard],
+        ["Browse Products", "Catalog", ShoppingBag],
+        ["My Credits", "Credits", Coins],
+        ["My Orders", "Orders", Truck],
+      ] as const;
   const descriptions: Record<string, string> = {
     Dashboard: "Everything you need to keep your business moving.",
     Overview: "A clear view of your private marketplace.",
@@ -2590,7 +2621,13 @@ export default function App() {
   };
   return (
     <div className="app">
-      <aside className={`sidebar ${mobile ? "open" : ""}`}>
+      {mobile && (
+        <div className="navigation-backdrop" onClick={closeNavigation} aria-hidden="true" />
+      )}
+      <aside id="workspace-navigation" className={`sidebar ${mobile ? "open" : ""}`}>
+        <button className="navigation-close" onClick={closeNavigation} aria-label="Close navigation">
+          <X size={22} />
+        </button>
         <button
           className="brand"
           aria-label="GPOP Fulfillment home"
@@ -2659,8 +2696,11 @@ export default function App() {
         <header className="topbar">
           <button
             className="mobile-menu"
+            ref={menuButton}
             aria-label="Open navigation"
-            onClick={() => setMobile(!mobile)}
+            aria-controls="workspace-navigation"
+            aria-expanded={mobile}
+            onClick={() => setMobile(true)}
           >
             <Menu />
           </button>
@@ -2686,6 +2726,18 @@ export default function App() {
             </span>
           </div>
         </header>
+        <nav className="mobile-tabs" aria-label="Quick navigation">
+          {mobileTabs.map(([route, label, Icon]) => (
+            <button
+              key={route}
+              aria-current={page === route ? "page" : undefined}
+              onClick={() => navigate(route)}
+            >
+              <Icon size={21} />
+              {label}
+            </button>
+          ))}
+        </nav>
         <main>
           <div className="page-heading">
             <div>

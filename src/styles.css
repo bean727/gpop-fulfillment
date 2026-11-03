@@ -2132,3 +2132,134 @@ button:focus-visible {
 .auth-seal {
   color: #f2c7cd;
 }
+
+.mobile-tabs,
+.navigation-close,
+.navigation-backdrop {
+  display: none;
+}
+
+@media (max-width: 760px) {
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 12;
+    background: #fff;
+    height: auto;
+    min-height: calc(60px + env(safe-area-inset-top));
+    padding-top: env(safe-area-inset-top);
+  }
+
+  .breadcrumbs {
+    font-size: 13px;
+  }
+
+  .main-wrap {
+    padding-bottom: calc(66px + env(safe-area-inset-bottom));
+  }
+
+  .mobile-tabs {
+    position: fixed;
+    z-index: 13;
+    inset: auto 0 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding: 5px max(8px, env(safe-area-inset-right))
+      calc(5px + env(safe-area-inset-bottom)) max(8px, env(safe-area-inset-left));
+    background: #fff;
+    border-top: 1px solid #dce3ec;
+    box-shadow: 0 -6px 24px #1529410d;
+  }
+
+  .mobile-tabs button {
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    gap: 4px;
+    min-height: 54px;
+    padding: 4px 2px;
+    border: 0;
+    border-radius: 10px;
+    background: transparent;
+    color: #405470;
+    font-size: 12px;
+    font-weight: 650;
+  }
+
+  .mobile-tabs button[aria-current="page"] {
+    background: #fbe8e8;
+    color: #a31820;
+  }
+
+  .navigation-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 19;
+    background: #14233880;
+    touch-action: none;
+  }
+
+  .sidebar.open {
+    width: min(320px, 86vw);
+    padding-top: calc(16px + env(safe-area-inset-top));
+    padding-bottom: calc(16px + env(safe-area-inset-bottom));
+    overscroll-behavior: contain;
+  }
+
+  .navigation-close {
+    position: absolute;
+    top: calc(12px + env(safe-area-inset-top));
+    right: 12px;
+    display: grid;
+    place-items: center;
+    width: 44px;
+    background: #f4f6f8;
+    border: 0;
+    border-radius: 10px;
+    color: #23364e;
+  }
+
+  .sidebar .partner-card {
+    display: none;
+  }
+
+  .page-heading p,
+  .welcome p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .page-heading p {
+    color: #52667d;
+    max-width: none;
+  }
+
+  .stat-label {
+    font-size: 12px;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  .table-wrap {
+    max-width: 100%;
+    overscroll-behavior-x: contain;
+  }
+
+  .overlay {
+    align-items: end;
+    padding: 0;
+  }
+
+  .modal {
+    width: 100%;
+    max-height: calc(100dvh - env(safe-area-inset-top) - 12px);
+    border-radius: 18px 18px 0 0;
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    overscroll-behavior: contain;
+  }
+}
