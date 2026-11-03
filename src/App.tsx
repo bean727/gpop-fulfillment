@@ -34,6 +34,7 @@ import {
 } from "lucide-react";
 import Brand, { BrandMark } from "./Brand";
 import JSZip from "jszip";
+import ListingPhoto from "./ListingPhoto";
 import LabelStorageCheck from "./LabelStorageCheck";
 import SellerAutoApproval from "./SellerAutoApproval";
 import SellerPaymentTerms from "./SellerPaymentTerms";
@@ -633,7 +634,7 @@ export default function App() {
         <div className="button-row">
           <button
             className="secondary"
-            onClick={() => void copy(p.listing_title || p.name)}
+            onClick={() => void copy(p.name)}
           >
             <Copy size={15} />
             Copy title
@@ -685,16 +686,17 @@ export default function App() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
+            const fields = Object.fromEntries(new FormData(e.currentTarget));
             void act("save_product", {
               id: p.id || "",
-              ...Object.fromEntries(new FormData(e.currentTarget)),
+              ...fields,
+              listing_title: String(fields.name).trim(),
             });
           }}
         >
           {[
             ["name", "Product name"],
             ["category", "Category"],
-            ["listing_title", "Listing title"],
             ["condition", "Condition"],
             ["dimensions", "Dimensions"],
             ["weight", "Weight"],
@@ -721,6 +723,28 @@ export default function App() {
         </form>
       </Modal>,
     );
+  const addProductPhoto = (productId: string) => {
+    let uploading = false;
+    setModal(
+      <Modal title="Add product photo" close={() => {
+        if (!uploading) setModal(null);
+      }}>
+        <ListingPhoto onUpload={async (preparePhoto) => {
+          uploading = true;
+          try {
+            const photo = await preparePhoto();
+            const path = await upload("product-assets", photo);
+            await command("add_image", { product_id: productId, path });
+            setModal(null);
+            setNotice("Product photo uploaded");
+            await reload();
+          } finally {
+            uploading = false;
+          }
+        }} />
+      </Modal>,
+    );
+  };
   const editVariant = (v: Row = {}, productId?: string) =>
     setModal(
       <Modal
@@ -1397,23 +1421,9 @@ export default function App() {
                       >
                         {p.archived ? "Restore" : "Archive"}
                       </button>
-                      <label className="upload-link">
+                      <button onClick={() => addProductPhoto(p.id)}>
                         Add photo
-                        <input
-                          type="file"
-                          accept="image/png,image/jpeg,image/webp"
-                          onChange={(e) => {
-                            const f = e.target.files?.[0];
-                            if (f)
-                              void run(async () =>
-                                command("add_image", {
-                                  product_id: p.id,
-                                  path: await upload("product-assets", f),
-                                }),
-                              );
-                          }}
-                        />
-                      </label>
+                      </button>
                       <label className="upload-link">
                         Listing asset
                         <input

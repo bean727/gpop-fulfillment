@@ -2263,3 +2263,86 @@ button:focus-visible {
     overscroll-behavior: contain;
   }
 }
+
+.listing-photo {
+  display: grid;
+  gap: 14px;
+}
+
+.listing-photo .button-row {
+  justify-content: flex-start;
+}
+
+.listing-photo .upload-link {
+  min-height: 44px;
+}
+
+.listing-photo .upload-link:focus-within {
+  outline: 2px solid #a31820;
+  outline-offset: 2px;
+}
+
+.listing-photo-frame {
+  position: relative;
+  width: min(100%, 300px);
+  aspect-ratio: 1;
+  margin-inline: auto;
+  overflow: hidden;
+  border-radius: 10px;
+  background: #f4f6f8;
+  touch-action: none;
+  cursor: grab;
+}
+
+.listing-photo-frame:active {
+  cursor: grabbing;
+}
+
+.listing-photo-frame img {
+  position: absolute;
+  max-width: none;
+  pointer-events: none;
+}
+
+.listing-photo-position {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.listing-photo input[type="range"] {
+  width: 100%;
+  min-height: 36px;
+  padding: 0;
+  accent-color: #a31820;
+}
+
+.listing-photo-error {
+  color: #a31820;
+}
+
+.listing-photo .upload-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 14px;
+  border: 1px solid #aebdcd;
+  border-radius: 8px;
+  color: #23364e;
+  text-decoration: none;
+  font-weight: 650;
+}
+
+.listing-photo .upload-link input {
+  display: block;
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.listing-photo .upload-link:has(input:disabled) {
+  opacity: 0.55;
+}
