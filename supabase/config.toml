@@ -1,0 +1,22 @@
+project_id = "relay-marketplace"
+[api]
+enabled = true
+port = 54321
+schemas = ["public", "graphql_public"]
+[db]
+port = 54322
+major_version = 17
+[auth]
+enabled = true
+site_url = "http://localhost:5173"
+additional_redirect_urls = ["http://127.0.0.1:5173"]
+enable_signup = false
+[auth.email]
+enable_signup = false
+enable_confirmations = true
+otp_expiry = 604800
+[storage]
+enabled = true
+file_size_limit = "10MiB"
+[functions.invite-seller]
+verify_jwt = false
